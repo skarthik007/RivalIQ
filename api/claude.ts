@@ -1,9 +1,7 @@
-import { NextRequest } from 'next/server';
-
 export const config = { runtime: 'edge' };
 
-export default async function handler(req: NextRequest) {
-  const body = await req.json();
+export default async function handler(request: Request) {
+  const body = await request.json();
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -17,6 +15,7 @@ export default async function handler(req: NextRequest) {
 
   const data = await response.json();
   return new Response(JSON.stringify(data), {
+    status: response.status,
     headers: { 'Content-Type': 'application/json' },
   });
 }
